@@ -16,7 +16,6 @@ async function fillExcelTimesheet(res, data, date, datesList, location) {
     workbook.xlsx.readFile('timesheet.xlsx')
     .then(function() {
         const sheetName = workbook.worksheets[0].name;
-        let location = 
         writeTheSelectedSheet(sheetName, workbook, data, date,datesList, location);
     });
     

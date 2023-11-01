@@ -287,7 +287,10 @@ async function submitExcelsheet(accessToken) {
         let date = `${getMonthName(thisMonth.split('-')[1]).substring(0, 3)}-${thisMonth.split('-')[0].substring(2,4)}`
         let lastArray = Array.from(Object.values(sorted_obj));
         let datesList = Array.from(Object.keys(sorted_obj));
-        fillExcelTimesheet(response, lastArray, date, datesList, 'UAE');
+        let location = 'KSA' 
+        if(isUAE) 
+            location = 'UAE'
+        fillExcelTimesheet(response, lastArray, date, datesList, location);
 
         
     }).catch(error => {
