@@ -5,7 +5,8 @@ const { default: axios } = require('axios');
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 var bodyParser = require('body-parser');
 var path = require("path");
-
+const AWS = require("aws-sdk");
+const s3 = new AWS.S3()
 
 module.exports = fillExcelTimesheet;
 
@@ -99,8 +100,25 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     worksheet.getCell('I9').value = date;
     worksheet.getCell('I10').value = location;
 
-    
-    await workbook.xlsx.writeFile('file.xlsx')
+
+    // await workbook.xlsx.writeFile('file.xlsx')
+    // const wbOut =  XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
+    const wbOut = workbook.xlsx.write('file.xlsx', {
+        bookType: 'xlsx',
+        type: 'buffer',
+      });
+
+    const myData = await s3
+      .putObject({
+        Bucket: "cyclic-graceful-clothes-foal-eu-west-3",
+        Key: 'timesheet.xlsx',
+        ACL: 'public-read',
+        Body: wbOut,
+        ContentType:
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      })
+      .promise();
+
 
     await delay(3000);
     reqRes.redirect('/success');
