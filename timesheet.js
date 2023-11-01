@@ -101,23 +101,23 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     worksheet.getCell('I10').value = location;
 
 
-    // await workbook.xlsx.writeFile('file.xlsx')
+    await workbook.xlsx.writeFile('/tmp/file.xlsx')
     // const wbOut =  XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
-    const wbOut = workbook.xlsx.write('file.xlsx', {
-        bookType: 'xlsx',
-        type: 'buffer',
-      });
+    // const wbOut = workbook.xlsx.write('file.xlsx', {
+    //     bookType: 'xlsx',
+    //     type: 'buffer',
+    //   });
 
-    const myData = await s3
-      .putObject({
-        Bucket: "cyclic-graceful-clothes-foal-eu-west-3",
-        Key: 'timesheet.xlsx',
-        ACL: 'public-read',
-        Body: wbOut,
-        ContentType:
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      })
-      .promise();
+    // const myData = await s3
+    //   .putObject({
+    //     Bucket: "cyclic-graceful-clothes-foal-eu-west-3",
+    //     Key: 'timesheet.xlsx',
+    //     ACL: 'public-read',
+    //     Body: wbOut,
+    //     ContentType:
+    //       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    //   })
+    //   .promise();
 
 
     await delay(3000);
