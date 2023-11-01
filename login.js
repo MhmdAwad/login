@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'./public')));
 
 app.post('/download', (req, res) => {
-    const filePath = path.join(__dirname, 'file.xlsx'); // Replace with the actual file path
+    const filePath = '/tmp/file.xlsx'; // Replace with the actual file path
   
     console.log(filePath)
     res.download(filePath, 'timesheet.xlsx', (err) => {
