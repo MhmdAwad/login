@@ -6,6 +6,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 var bodyParser = require('body-parser');
 var path = require("path");
 
+
 module.exports = fillExcelTimesheet;
 
 var reqRes = null
@@ -17,7 +18,7 @@ async function fillExcelTimesheet(res, data, date, datesList, location) {
     .then(function() {
         const sheetName = workbook.worksheets[0].name;
         writeTheSelectedSheet(sheetName, workbook, data, date,datesList, location);
-    });
+    }).catch(err=> console.error(err));
     
 }
 
@@ -97,6 +98,8 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     worksheet.name = date
     worksheet.getCell('I9').value = date;
     worksheet.getCell('I10').value = location;
+
+    
     await workbook.xlsx.writeFile('file.xlsx')
 
     await delay(3000);
