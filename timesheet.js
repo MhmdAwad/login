@@ -34,6 +34,9 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     const sheetDaysRows = ['C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21', 'C22', 'C23', 'C24', 'C25', 'C26', 'C27','C28',
     'H13','H14','H15','H16','H17','H18','H19','H20','H21','H22','H23','H24','H25','H26','H27']
 
+    const dayNumbersRows = ['B13', 'B14', 'B15', 'B16', 'B17', 'B18', 'B19', 'B20', 'B21', 'B22', 'B23', 'B24', 'B25', 'B26', 'B27','B28',
+    'G13','G14','G15','G16','G17','G18','G19','G20','G21','G22','G23','G24','G25','G26','G27']
+
     var worksheet = workbook.getWorksheet(sheetName);
     
 
@@ -41,6 +44,8 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     for (let i=0; i<data.length; i++){
     
         let day = getDayName(datesList[i]);
+        let dayNumber = getDayNumber();
+        if(dayNumber < dayNumbersRows[i].value) return
         worksheet.getCell(sheetDaysRows[i]).value = day;
         worksheet.getCell(sheetRows[i]).value = data[i];
 
@@ -127,8 +132,11 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     // reqRes.status(200).json({ succeess: 'Timesheet excel file has been created!' });
   }
 
-  function getDayName(dateStr)
-{
+  function getDayName(dateStr) {
     var date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { weekday: 'long' }).substring(0, 3);        
+}
+
+function getDayNumber() {
+    return new Date().getDate();
 }
