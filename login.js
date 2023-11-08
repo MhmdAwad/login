@@ -214,7 +214,9 @@ async function getTimesheetList(accessToken) {
         
     })
     .catch(error => {
-        console.error(error);
+        if(sendEmail)
+                submitExcelsheet(token);
+        else
         response.status(400).json({ error: 'An error occurred with retrieving the timesheet!' });
     });
 }
@@ -297,7 +299,9 @@ async function submitExcelsheet(accessToken) {
 
         
     }).catch(error => {
-        console.error(error);
+        if(sendEmail)
+                submitExcelsheet(token);
+        else
         response.status(400).json({ error: 'An error occurred with retrieving the timesheet!' });
     });
 }
