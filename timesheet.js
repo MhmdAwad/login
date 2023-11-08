@@ -45,10 +45,7 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     
         let day = getDayName(datesList[i]);
         let dayNumber = getDayNumber();
-        if(dayNumber >= dayNumbersRows[i].value){
-            worksheet.getCell(sheetRows[i]).value = data[i];
-        }
-        
+
         worksheet.getCell(sheetDaysRows[i]).value = day;
         if(location == "UAE") {
             if(day == "Sat" || day == "Sun") {
@@ -58,6 +55,10 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
             if(day == "Fri" || day == "Sat") {
                 cellArray.push(sheetDaysRows[i]);
             }
+        }
+        
+        if(dayNumber >= dayNumbersRows[i].value){
+            worksheet.getCell(sheetRows[i]).value = data[i];
         }
     }
 
