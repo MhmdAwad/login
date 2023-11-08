@@ -139,7 +139,10 @@ async function getTimesheetList(accessToken) {
         })).length == 0
 
         if(isTimesheetCompleted)
-            response.redirect('/failure')
+            if(sendEmail)
+                submitExcelsheet(token);
+            else
+                response.redirect('/failure');
 
 
         var list = res.data.filter((function(element){

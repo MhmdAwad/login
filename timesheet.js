@@ -45,10 +45,11 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
     
         let day = getDayName(datesList[i]);
         let dayNumber = getDayNumber();
-        if(dayNumber < dayNumbersRows[i].value) return
+        if(dayNumber >= dayNumbersRows[i].value){
+            worksheet.getCell(sheetRows[i]).value = data[i];
+        }
+        
         worksheet.getCell(sheetDaysRows[i]).value = day;
-        worksheet.getCell(sheetRows[i]).value = data[i];
-
         if(location == "UAE") {
             if(day == "Sat" || day == "Sun") {
                 cellArray.push(sheetDaysRows[i]);
@@ -107,29 +108,10 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
 
 
     await workbook.xlsx.writeFile('/tmp/file.xlsx')
-    // const wbOut =  XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
-    // const wbOut = workbook.xlsx.write('file.xlsx', {
-    //     bookType: 'xlsx',
-    //     type: 'buffer',
-    //   });
-
-    // const myData = await s3
-    //   .putObject({
-    //     Bucket: "cyclic-graceful-clothes-foal-eu-west-3",
-    //     Key: 'timesheet.xlsx',
-    //     ACL: 'public-read',
-    //     Body: wbOut,
-    //     ContentType:
-    //       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    //   })
-    //   .promise();
-
 
     await delay(3000);
     reqRes.redirect('/success');
-    
 
-    // reqRes.status(200).json({ succeess: 'Timesheet excel file has been created!' });
   }
 
   function getDayName(dateStr) {
