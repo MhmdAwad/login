@@ -215,7 +215,7 @@ async function getTimesheetList(accessToken) {
     })
     .catch(error => {
         if(sendEmail)
-                submitExcelsheet(token);
+            submitExcelsheet(accessToken);
         else
         response.status(400).json({ error: 'An error occurred with retrieving the timesheet!' });
     });
