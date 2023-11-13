@@ -24,9 +24,44 @@ async function fillExcelTimesheet(res, data, date, datesList, location) {
 }
 
 
+function getAllDaysInMonth() {
+    const myDate = new Date();
+    const days = [];
+
+    for (let day = 1; day <= 31; day++) {
+        days.push(`${myDate.getFullYear()}-${myDate.getMonth() + 1}-${day}`);
+    }
+
+    return days;
+}
+
+
+
+function getLastSubmittedDayNumber(isUAE) {
+    const today = new Date();
+    let nextFriday = new Date();
+  
+    var day = 5
+    if(!isUAE) day = 4
+    while (nextFriday.getDay() !== day) { // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+      nextFriday.setDate(nextFriday.getDate() + 1);
+    }
+  
+    return nextFriday.getDate();
+  }
 
 async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, location) {
 
+    let untilDay = getLastSubmittedDayNumber(location == "UAE")
+
+    let allDates = getAllDaysInMonth()
+    // if(datesList.length < 30){
+    //     for(let i = datesList.length+1; i < 31; i++) {
+
+    //         datesList.push(i)
+    //     }
+    // }
+    console.log(allDates)
     
     const sheetRows = ['D13', 'D14', 'D15', 'D16', 'D17', 'D18', 'D19', 'D20', 'D21', 'D22', 'D23', 'D24', 'D25', 'D26', 'D27','D28',
     'I13','I14','I15','I16','I17','I18','I19','I20','I21','I22','I23','I24','I25','I26','I27']
@@ -39,11 +74,10 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
 
     var worksheet = workbook.getWorksheet(sheetName);
     
-
     var cellArray = []
-    for (let i=0; i<data.length; i++){
+    for (let i=0; i < allDates.length; i++){
     
-        let day = getDayName(datesList[i]);
+        let day = getDayName(allDates[i]);
         let dayNumber = getDayNumber();
 
         worksheet.getCell(sheetDaysRows[i]).value = day;
@@ -57,8 +91,14 @@ async function writeTheSelectedSheet(sheetName, workbook,data, date, datesList, 
             }
         }
         
-        if(dayNumber >= dayNumbersRows[i].value){
-            worksheet.getCell(sheetRows[i]).value = data[i];
+        
+        if(untilDay >= Number(worksheet.getCell(dayNumbersRows[i]).value)){
+            if(i < data.length){
+                worksheet.getCell(sheetRows[i]).value = data[i];
+            }else {
+                worksheet.getCell(sheetRows[i]).value = '';
+            }
+            
         }
     }
 

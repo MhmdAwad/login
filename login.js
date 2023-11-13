@@ -9,14 +9,14 @@ var path = require("path");
 
 module.exports = getMicrosoftToken
 const app  = express();
-const port = 3000;
+const port = 100;
 
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname,'./public')));
 
 app.post('/download', (req, res) => {
-    const filePath = '/tmp/file.xlsx'; // Replace with the actual file path
+    const filePath = '/tmp/file.xlsx'; 
   
     console.log(filePath)
     res.download(filePath, 'timesheet.xlsx', (err) => {
@@ -185,9 +185,15 @@ async function getTimesheetList(accessToken) {
             
             for(let i = 0; i < 7; i++){
                 var hours = 8
+                if(isUAE){
                 if(i == 0 || i == dates.length - 1) {
                     hours = null
                 }
+            }else {
+                if(i == dates.length - 2 || i == dates.length - 1) {
+                    hours = null
+                }
+            }
                 
                 const obj = {
                     "employeeTimesheetRequestId": timesheetRequestId,
@@ -259,8 +265,8 @@ async function submitExcelsheet(accessToken) {
         const splittedDate = res.data[0].weekDate.split('-');
         var thisMonth = `${splittedDate[0]}-${splittedDate[1]}`;
         let myDate = new Date()
-        let myMonth = `${myDate.getFullYear()}-${myDate.getMonth() + 1}`
-        console.log(myMonth)
+        thisMonth = `${myDate.getFullYear()}-${myDate.getMonth() + 1}`
+        // console.log(myMonth)
         // thisMonth = '2023-10'
         
         res.data.forEach((function(element) {
